@@ -23,6 +23,7 @@ public class Receipt extends javax.swing.JFrame {
     public Receipt(AccountDetails_entity obj) {
         super("Mini Statement");
         initComponents();
+        
         Receipt.obj = obj;      // or this.obj = obj;
         setData();
     }
@@ -34,12 +35,17 @@ public class Receipt extends javax.swing.JFrame {
         jLabel8.setText(obj.getAccountNo());
         jLabel9.setText(obj.getAccountType());
         
-        if(Integer.parseInt(obj.getLastTransaction())<0)
+        int LastTransactionAmmount = Integer.parseInt(obj.getLastTransaction());
+        
+        if(LastTransactionAmmount < 0)
+        {
+            LastTransactionAmmount = -LastTransactionAmmount;
             jLabel11.setText("Withdrawl");
+        }
         else
             jLabel11.setText("Deposite");
         
-        jLabel13.setText(obj.getLastTransaction()+" Rs.");
+        jLabel13.setText(LastTransactionAmmount+" Rs.");
         
         jLabel14.setText(obj.getTransactionDate());
         jLabel10.setText(obj.getAccBalance()+" Rs.");

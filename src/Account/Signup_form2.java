@@ -19,11 +19,9 @@ public class Signup_form2 extends javax.swing.JFrame {
 
     /**
      * Creates new form Signup_form1
+     * @param o
      */
     
-    public Signup_form2() {
-     
-    }
     
     // call.. when Signup_form1 -> Next     or      when Signup_form3 -> Back
     public Signup_form2(UserAccount_entity o) {    
@@ -36,9 +34,8 @@ public class Signup_form2 extends javax.swing.JFrame {
         
     }
 
-    public UserAccount_entity getData()    // store all Signup_form2's entered data
+    public void getData()    // store all Signup_form2's entered data
     {   
-        obj.setFormNO(jLabel2.getText());   // set form number
         
         obj.setAadhar(jTextField1.getText());
         obj.setContact(jTextField2.getText());
@@ -50,7 +47,6 @@ public class Signup_form2 extends javax.swing.JFrame {
         
         obj.setOccupation((String)jComboBox2.getSelectedItem());
         
-        return obj;
     }
     
     // set all data into Signup_form2's field,  when you back from Signup_form3 or you are coming from Signup_form1
@@ -60,7 +56,6 @@ public class Signup_form2 extends javax.swing.JFrame {
         
         jTextField1.setText(obj.getAadhar());
         jTextField2.setText(obj.getContact());
-        
         
         if(obj.getSec_ques() == null)
             jComboBox1.setSelectedIndex(0);
@@ -293,7 +288,8 @@ public class Signup_form2 extends javax.swing.JFrame {
                         // back button code
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        obj = getData();    // store all the Signup_form2's data
+        getData();    // store all the Signup_form2's data
+        
         setVisible(false);
         Signup_form1 o = new Signup_form1(obj);
         o.setVisible(true);
@@ -301,7 +297,7 @@ public class Signup_form2 extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        obj = getData();    // store all the Signup_form2's data
+        getData();    // store all the Signup_form2's data
         
         boolean b = validateSignupData.Signup_form2Validate(obj);
         

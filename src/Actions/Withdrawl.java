@@ -19,11 +19,11 @@ public class Withdrawl extends javax.swing.JFrame {
     static AccountDetails_entity obj;
 
     String withdrawl, pin;      //textfield
-    int ammount;        // withdraw convert into int
+    int WithdrawlAmmount;        // withdraw convert into int
     
-    String prevTransaction;
-    String prevDate;
-    int accBalance;     // from obj
+    String LastTransactionAmmount;
+    String LastTransactionDate;
+    int CurrentAccountBalance;     // from obj
     
     /**
      * Creates new form Withdraw
@@ -32,27 +32,28 @@ public class Withdrawl extends javax.swing.JFrame {
     public Withdrawl(AccountDetails_entity obj) {
         super("Withdrawl Ammount");
         initComponents();
+        
         Withdrawl.obj = obj;        // this.obj = obj;
         
-        
-        prevTransaction = obj.getLastTransaction();
-        prevDate = obj.getTransactionDate();
-
         jLabel2.setText(obj.getName());
         jLabel4.setText(obj.getCardNo());
+        
+        LastTransactionAmmount = obj.getLastTransaction();
+        LastTransactionDate = obj.getTransactionDate();
+
     }
 
     boolean validateData()
     {
         boolean b = false;
         
-        accBalance = Integer.parseInt(obj.getAccBalance());
+        CurrentAccountBalance = Integer.parseInt(obj.getAccBalance());
         
-        withdrawl = jTextField2.getText();
+        withdrawl = jTextField2.getText().trim();
         pin = jTextField3.getText();
         
         try{
-            ammount = Integer.parseInt(withdrawl);
+            WithdrawlAmmount = Integer.parseInt(withdrawl);
         }catch(NumberFormatException e)
         {
             JOptionPane.showMessageDialog(null, "Enter Valid Ammount");
@@ -61,9 +62,9 @@ public class Withdrawl extends javax.swing.JFrame {
         
         if(!pin.equals(obj.getPin()))
             JOptionPane.showMessageDialog(null, "Plese Enter Correct Pin Number");
-        else if(ammount%100 != 0)
+        else if(WithdrawlAmmount%100 != 0)
             JOptionPane.showMessageDialog(null, "Plese Enter Valid Ammount");
-        else if(ammount > accBalance)
+        else if(WithdrawlAmmount > CurrentAccountBalance)
             JOptionPane.showMessageDialog(null, "Insufficient Balance");
         else
             b = true;
@@ -219,7 +220,7 @@ public class Withdrawl extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(validateData())
         {
-            obj.setAccBalance(Integer.toString(accBalance-ammount));
+            obj.setAccBalance(Integer.toString(CurrentAccountBalance-WithdrawlAmmount));
             obj.setLastTransaction("-"+withdrawl);
             
             Date d = new Date();        // for update date and time
@@ -227,7 +228,7 @@ public class Withdrawl extends javax.swing.JFrame {
             String date = df.format(d);
             obj.setTransactionDate(date);
             
-            if(OperationsInDatabase.updateAccountBalance(obj))     // update accBalance
+            if(OperationsInDatabase.updateAccountBalance(obj))     // update CurrentAccountBalance
             {
                 setVisible(false);
                 JOptionPane.showMessageDialog(null, "Withrawl Successfully");
@@ -237,9 +238,9 @@ public class Withdrawl extends javax.swing.JFrame {
             }
             else        // if transacation failed, set 'previous accbalance' and 'last transAmmount'
             {
-                obj.setAccBalance(Integer.toString(accBalance));
-                obj.setLastTransaction(prevTransaction);
-                obj.setTransactionDate(prevDate);
+                obj.setAccBalance(Integer.toString(CurrentAccountBalance));
+                obj.setLastTransaction(LastTransactionAmmount);
+                obj.setTransactionDate(LastTransactionDate);
                 JOptionPane.showMessageDialog(null, "Oops! Something went wrong...\n Plese Try Again Later");
             }
             

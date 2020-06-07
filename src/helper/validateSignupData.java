@@ -41,14 +41,41 @@ public class validateSignupData {
     {
         boolean b = false;
         
-        if(obj.getAadhar().trim().length() != 12)
+        String Aadhar = obj.getAadhar().trim();
+        String Contact = obj.getContact().trim();
+        
+        if(Aadhar.length() != 12)
             JOptionPane.showMessageDialog(null, "Plese Enter Your 12 Digit Aadhar Number");
-        else if(obj.getContact().trim().length() != 10)
+        else if(Contact.length() != 10)
             JOptionPane.showMessageDialog(null, "Plese Enter Your Contact Number");
-        else if(obj.getSec_ans().isEmpty())
+        else if(obj.getSec_ans().trim().isEmpty())
             JOptionPane.showMessageDialog(null, "Plese Enter The Answer Of Your Selected Question");
         else
-            b = true;
+        {
+            try{
+                Long.parseLong(Aadhar);
+            }catch(NumberFormatException e)
+            {
+                JOptionPane.showMessageDialog(null, "Plese Enter Valid 12-Digit Aadhar Number");
+                return b;
+            }
+            
+            try{
+                Long.parseLong(Contact);
+            }catch(NumberFormatException e)
+            {
+                JOptionPane.showMessageDialog(null, "Plese Enter Valid 10-Digit Contact Number");
+                return b;
+            }
+            
+            if(Aadhar.charAt(0) == '0')
+                JOptionPane.showMessageDialog(null, "Plese Enter Valid 12-Digit Aadhar Number");
+            else if(Contact.charAt(0) < 54)
+                JOptionPane.showMessageDialog(null, "Plese Enter Valid 10-Digit Contact Number");
+            else
+                b = true;
+
+        }
         
         return b;
     }

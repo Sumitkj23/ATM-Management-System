@@ -7,6 +7,7 @@ package Actions;
 
 import helper.AccountDetails_entity;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
 /**
  *
@@ -25,6 +26,7 @@ public class ChangePin extends javax.swing.JFrame {
     public ChangePin(AccountDetails_entity obj) {
         super("Change Pin...");
         initComponents();
+        
         ChangePin.obj= obj;    // this.obj = obj;
         
         jLabel1.setText("Hello "+obj.getName().toUpperCase());
@@ -37,19 +39,9 @@ public class ChangePin extends javax.swing.JFrame {
     {
         boolean b = false;
         
-        String secAns = jTextField1.getText();
-        newPin = jPasswordField2.getText().trim();
+        String secAns = jTextField1.getText().trim();
+        newPin = jPasswordField2.getText();
         
-        try
-        {
-            Integer.parseInt(newPin);
-        }catch(NumberFormatException e) // if exception occur then return 'false' directly
-        {
-            JOptionPane.showMessageDialog(null, "Plese Enter Valid 4-digit New Pin");
-            jPasswordField2.requestFocus();
-            return b;
-        }
-
         // class 'OperationsInDatabase' having 'getSecurityAnswer(CardNumber)' return sec_ans
         // check answer
         if(!secAns.equalsIgnoreCase(OperationsInDatabase.getSecurityAnswer(obj.getCardNo())))
@@ -57,9 +49,14 @@ public class ChangePin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Plese Fill Correct Security Answer");
             jTextField1.requestFocus();
         }
+        else if(jPasswordField1.getText().length() == 0)
+        {
+            JOptionPane.showMessageDialog(null, "Plese Enter Your Current Pin");
+            jPasswordField1.requestFocus();
+        }
         else if(!jPasswordField1.getText().equals(obj.getPin())) // check current pin enterd correctly or not
         {
-                JOptionPane.showMessageDialog(null, "Plese Enter Correct Pin");
+                JOptionPane.showMessageDialog(null, "Plese Enter Correct Current Pin");
                 jPasswordField1.requestFocus();
         }
         else if( newPin.length() != 4)
@@ -68,7 +65,17 @@ public class ChangePin extends javax.swing.JFrame {
             jPasswordField2.requestFocus();
         }
         else
-            b = true;
+        {
+            try
+            {
+                Integer.parseInt(newPin);
+                b = true;
+            }catch(NumberFormatException e) // if exception occur then return 'false' directly
+            {
+                JOptionPane.showMessageDialog(null, "Plese Enter Valid 4-digit New Pin");
+                jPasswordField2.requestFocus();
+            }
+        }
             
         return b;
     }
@@ -227,21 +234,41 @@ public class ChangePin extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(validateData())
         {
-            String n_pin = JOptionPane.showInputDialog("Plese Confirm Your New 4-Digit Pin");
-            if(newPin.equals(n_pin))
+            JPasswordField n_pin = new JPasswordField();
+            int i = JOptionPane.showConfirmDialog(null, n_pin, "Plese Confirm Your New 4-Digit Pin",JOptionPane.OK_OPTION);
+            
+            if(i == 0)
             {
-                if(OperationsInDatabase.updatePin(obj.getCardNo(), newPin))
+                String confirm_pin = n_pin.getText();
+                
+                try
                 {
-                    setVisible(false);
-                    JOptionPane.showMessageDialog(null, "Pin Change Successfully");
-                    TransactionMenu o = new TransactionMenu(obj);
-                    o.setVisible(true);
+                    Integer.parseInt(confirm_pin);
+                    
+                    if(newPin.equals(confirm_pin))
+                    {
+                        if(OperationsInDatabase.updatePin(obj.getCardNo(), newPin))
+                        {
+                            obj.setPin(newPin);
+
+                            setVisible(false);
+                            JOptionPane.showMessageDialog(null, "Pin Change Successfully");
+
+                            TransactionMenu o = new TransactionMenu(obj);
+                            o.setVisible(true);
+                        }
+                        else
+                            JOptionPane.showMessageDialog(null, "OOps! Something Went Wrong \n Plese Try Again Later");
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null, "Pin Not Match");
                 }
-                else
-                    JOptionPane.showMessageDialog(null, "OOps! Something Went Wrong \n Plese Try Again Later");
+                catch(NumberFormatException e)
+                {
+                    JOptionPane.showMessageDialog(null, "         Pin Not Match... \nPlese Enter Valid 4-digit Pin");
+                }
+                
             }
-            else
-                JOptionPane.showMessageDialog(null, "Pin Not Match");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

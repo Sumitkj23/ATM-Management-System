@@ -8,7 +8,6 @@ package Account;
 import helper.UserAccount_entity;
 import helper.getRandomNumber;
 import helper.validateSignupData;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -37,6 +36,7 @@ public class Signup_form1 extends javax.swing.JFrame {
     public Signup_form1(UserAccount_entity obj) {      // get "Signup_form2" data with "Signup_form1" data by "obj"
         super("New Account Application Form");
         initComponents();
+        
         this.str = obj.getFormNO();
         this.obj = obj;         // get the reference of an object
         
@@ -44,7 +44,7 @@ public class Signup_form1 extends javax.swing.JFrame {
     }
 
     // Signup_form1 -> next button      for save all the enterd data from Signup_form1
-    public UserAccount_entity getData()        //pass all "Signup_form1" data into "UserAccount_entity" object "obj"
+    public void getData()        //pass all "Signup_form1" data into "UserAccount_entity" object "obj"
     {   
         obj.setFormNO(str);
         obj.setName(jTextField1.getText());
@@ -73,7 +73,6 @@ public class Signup_form1 extends javax.swing.JFrame {
         
         obj.setState(jTextField6.getText());
         
-        return obj;
     }
     
     //Signup_form2 -> back button code      this method will call in costructor... when back button press from Signup_form2
@@ -97,10 +96,7 @@ public class Signup_form1 extends javax.swing.JFrame {
         jTextField3.setText(obj.getAddress());
         jTextField4.setText(obj.getCity());
         
-        if(obj.getPinCode() == 0)
-            jTextField5.setText("");
-        else
-            jTextField5.setText(Integer.toString(obj.getPinCode()));
+        jTextField5.setText(Integer.toString(obj.getPinCode()));
         
         jTextField6.setText(obj.getState());
         
@@ -418,7 +414,7 @@ public class Signup_form1 extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
-        obj = getData();    // store all the entered data from Signup_form1 
+        getData();    // store all the entered data from Signup_form1 
         
         boolean b = validateSignupData.Signup_form1Validate(obj);
         
@@ -435,8 +431,8 @@ public class Signup_form1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
-        Login obj = new Login();
-        obj.setVisible(true);
+        Login o = new Login();
+        o.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // clear button code

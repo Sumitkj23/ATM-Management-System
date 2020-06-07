@@ -39,83 +39,89 @@ public class Deposit extends javax.swing.JFrame {
         
     }
     
-    void getData()      // store all "Deposit's" entered data
+    boolean getAmmountDetails()      // store all "Deposit's" entered data
     {
-        String two_th = jTextField2.getText();
-        String five_hun = jTextField3.getText();
-        String two_hun = jTextField4.getText();
-        String one_hun = jTextField5.getText();
-        String fifty = jTextField6.getText();
-        String twenty = jTextField7.getText();
-        String ten = jTextField8.getText();
+        boolean b = true;
+        
+        String two_th = jTextField2.getText().trim();
+        String five_hun = jTextField3.getText().trim();
+        String two_hun = jTextField4.getText().trim();
+        String one_hun = jTextField5.getText().trim();
+        String fifty = jTextField6.getText().trim();
+        String twenty = jTextField7.getText().trim();
+        String ten = jTextField8.getText().trim();
         
         total = 0;
         
         try     // if user enter rs. in string then it is not converted into Int and then exception occur
         {
-            if(!"".equals(two_th.trim()))   // if ammount enter then set test
+            if(!"".equals(two_th))   // if ammount enter then set test
             {
-                int a1 = Integer.parseInt(two_th.trim())*2000;
+                int a1 = Integer.parseInt(two_th)*2000;
                 total += a1;
                 jLabel15.setText(a1 + " Rs.");
             }
             else    // if ammont enter and 2nd time ammount erase so set text as "" (empty) in labels
                 jLabel15.setText("");
             
-            if(!"".equals(five_hun.trim()))
+            if(!"".equals(five_hun))
             {
-                int a2 = Integer.parseInt(five_hun.trim())*500;
+                int a2 = Integer.parseInt(five_hun)*500;
                 total += a2;
                 jLabel16.setText(a2 + " Rs.");
             }else
                 jLabel16.setText("");
             
-            if(!"".equals(two_hun.trim()))
+            if(!"".equals(two_hun))
             {
-                int a3 = Integer.parseInt(two_hun.trim())*200;
+                int a3 = Integer.parseInt(two_hun)*200;
                 total += a3;
                 jLabel17.setText(a3 + " Rs.");
             }else
                 jLabel17.setText("");
             
-            if(!"".equals(one_hun.trim()))
+            if(!"".equals(one_hun))
             {
-                int a4 = Integer.parseInt(one_hun.trim())*100;
+                int a4 = Integer.parseInt(one_hun)*100;
                 total += a4;
                 jLabel18.setText(a4 + " Rs.");
             }else
                 jLabel18.setText("");
             
-            if(!"".equals(fifty.trim()))
+            if(!"".equals(fifty))
             {
-                int a5 = Integer.parseInt(fifty.trim())*50;
+                int a5 = Integer.parseInt(fifty)*50;
                 total += a5;
                 jLabel19.setText(a5 + " Rs.");
             }else
                 jLabel19.setText("");
             
-            if(!"".equals(twenty.trim()))
+            if(!"".equals(twenty))
             {
-                int a6 = Integer.parseInt(twenty.trim())*20;
+                int a6 = Integer.parseInt(twenty)*20;
                 total += a6;
                 jLabel20.setText(a6 + " Rs.");
             }else
                 jLabel20.setText("");
             
-            if(!"".equals(ten.trim()))
+            if(!"".equals(ten))
             {
-                int a7 = Integer.parseInt(ten.trim())*10;
+                int a7 = Integer.parseInt(ten)*10;
                 total += a7;
                 jLabel21.setText(a7 + " Rs.");
             }else
                 jLabel21.setText("");
             
+            jLabel23.setText(Integer.toString(total)+" Rs.");
+            
         }catch(Exception e)
         {
+            total = 0;
+            b = false;
             JOptionPane.showMessageDialog(null, "Enter Valid Ammount Details");
         }
         
-        jLabel23.setText(Integer.toString(total)+" Rs.");
+        return b;
     }
     
     boolean validateData()
@@ -125,7 +131,10 @@ public class Deposit extends javax.swing.JFrame {
         String acc = jTextField1.getText().trim();
         
         if("".equals(acc))  // if deposite ammount not entered
+        {
             JOptionPane.showMessageDialog(null, "Plese Enter Deposite Ammount");
+            jTextField1.requestFocus();
+        }
         else            // if deposite ammount = 0 or give by any string(i.e wrong) 
         {
             try
@@ -133,10 +142,16 @@ public class Deposit extends javax.swing.JFrame {
                 depositeAmmount = Integer.parseInt(acc);    // if deposite ammount not into int format then exception occur
                 if(depositeAmmount < 500)     // check deposite ammount = 0 or 000000... or <500
                     JOptionPane.showMessageDialog(null, "Minimun Deposite Ammount should be 500 Rs.\n So, Plese Enter Valid Deposite Ammount");
-                else if(depositeAmmount != total)
-                    JOptionPane.showMessageDialog(null, "Plese Check Ammount Details With Your Entered Deposite Ammount\n   You Can Click On Total For Cross Checking");
                 else
-                    b = true;
+                {
+                    if(getAmmountDetails())
+                    {
+                        if(depositeAmmount != total)
+                            JOptionPane.showMessageDialog(null, "Plese Check Ammount Details With Your Entered Deposite Ammount\n   You Can Click On Total For Cross Checking");
+                        else
+                            b = true;
+                    }
+                }
             }catch(NumberFormatException e)
             {
                 JOptionPane.showMessageDialog(null, "Plese Enter Valid Deposite Ammount");
@@ -513,14 +528,12 @@ public class Deposit extends javax.swing.JFrame {
                     // total button code,       for set info into label
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        getData();      // display label data
+        getAmmountDetails();      // display label data
     }//GEN-LAST:event_jButton4ActionPerformed
 
                 // submit button code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
-        getData();  // display label's data
         
         if(validateData())          // check validation
         {
@@ -529,9 +542,11 @@ public class Deposit extends javax.swing.JFrame {
             String date = df.format(d);
             obj.setTransactionDate(date);
             
-            int LastTransaction = Integer.parseInt(obj.getAccBalance());     // fetch previous accbalance
-            int currentBalance = LastTransaction + depositeAmmount;          // for update balance
-            String prevTransaction = obj.getLastTransaction();      // fetch last transaction ammount
+            int LastAccountBalance = Integer.parseInt(obj.getAccBalance());     // fetch previous accbalance
+            
+            int currentBalance = LastAccountBalance + depositeAmmount;          // for update balance
+            
+            String LastTransaction = obj.getLastTransaction();      // fetch last transaction ammount
             
             obj.setLastTransaction(Integer.toString(depositeAmmount));
             obj.setAccBalance(Integer.toString(currentBalance));
@@ -546,9 +561,10 @@ public class Deposit extends javax.swing.JFrame {
             }
             else        // if transacation failed, set 'previous accbalance' and 'last transAmmount'
             {
-                obj.setAccBalance(Integer.toString(LastTransaction));
-                obj.setLastTransaction(prevTransaction);
+                obj.setAccBalance(Integer.toString(LastAccountBalance));
+                obj.setLastTransaction(LastTransaction);
                 obj.setTransactionDate(prevDate);
+                
                 JOptionPane.showMessageDialog(null, "Oops! Something went wrong...\n Plese Try Again Later");
             }
         }

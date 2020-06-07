@@ -28,6 +28,7 @@ public class Signup_form3 extends javax.swing.JFrame {
     public Signup_form3(UserAccount_entity obj) {
         super("New Account Application Form 3");
         initComponents();
+        
         Signup_form3.obj = obj;     // or this.obj = obj;
         
         jCheckBox1.setEnabled(false);
@@ -37,10 +38,8 @@ public class Signup_form3 extends javax.swing.JFrame {
     }
 
     
-    public UserAccount_entity getData()    // store all Signup_form3's entered data
+    public void getData()    // store all Signup_form3's entered data
     {
-        obj.setFormNO(jLabel2.getText());   // set form number
-        
         String s = null;
         
         if(jRadioButton3.isSelected())
@@ -69,10 +68,9 @@ public class Signup_form3 extends javax.swing.JFrame {
         
         obj.setService(s1);
         
-        
         // ------ in package "helper" class "getRandomNumber" having static method "generate4DigitCode()" --------
         
-                                              //generate account number
+                                           //generate account number
         String acc_num = "7" + getRandomNumber.generate4DigitCode() + getRandomNumber.generate4DigitCode() + getRandomNumber.generate4DigitCode();
         obj.setAccNo(acc_num);
         
@@ -83,7 +81,6 @@ public class Signup_form3 extends javax.swing.JFrame {
         String pin = getRandomNumber.generate4DigitCode();      // generate 4-digit pin number
         obj.setPinNo(pin);
         
-        return obj;
     }
     
     // set all data into Signup_form3's field,  when you back from Diposite, or you are coming from Signup_form2
@@ -436,15 +433,12 @@ public class Signup_form3 extends javax.swing.JFrame {
                             // back button code
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        /*int s = JOptionPane.showConfirmDialog(null, "Are you sure? you want to exit...",  "ATM Management System", JOptionPane.YES_NO_OPTION);
-        if(s == 0)
-            System.exit(0);*/
         
-        obj = getData();    // store all the Signup_form3's data
+        getData();          // store all the Signup_form3's data
+        
         setVisible(false);
         Signup_form2 o = new Signup_form2(obj);
         o.setVisible(true);
-        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -452,7 +446,7 @@ public class Signup_form3 extends javax.swing.JFrame {
                         // Next botton code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        obj = getData();    // store all the Signup_form3's data
+        getData();    // store all the Signup_form3's data
         
         if(obj.getAccType() == null)
             JOptionPane.showMessageDialog(null, "Plese Choose Account Type");

@@ -60,7 +60,7 @@ public class Login extends javax.swing.JFrame {
         boolean b = false;
         
            // check card number 16 digit or not    and pin have 4 digits or not
-        if(jTextField1.getText().length() == 16 && jPasswordField1.getText().length() == 4)        
+        if(jTextField1.getText().trim().length() == 16 && jPasswordField1.getText().trim().length() == 4)        
         {
             cardNo = getCardNumber();
             String pin = jPasswordField1.getText();
@@ -88,8 +88,7 @@ public class Login extends javax.swing.JFrame {
                 
             }catch(Exception e)
             {
-
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, e);
             }
         }
         
@@ -286,7 +285,10 @@ public class Login extends javax.swing.JFrame {
             o.setVisible(true);
         }
         else
+        {
             JOptionPane.showMessageDialog(null, "Card Number Or Pin Not Correct\n     Plese Enter Valid Details...");
+            jPasswordField1.setText("");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
         
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
