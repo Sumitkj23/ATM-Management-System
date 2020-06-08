@@ -10,6 +10,7 @@ package helper;
  * @author Sumit Kumar
  */
 
+    // getters & setters for 'UserAccount' table
 public class UserAccount_entity {
     
     private String formNO;

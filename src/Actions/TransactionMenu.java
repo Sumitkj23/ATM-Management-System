@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class TransactionMenu extends javax.swing.JFrame {
 
-    static AccountDetails_entity obj;
+    static AccountDetails_entity obj;      // since main method static... so, constructor argument should also be static
     
     /**
      * Creates new form TransactionMenu
@@ -25,9 +25,9 @@ public class TransactionMenu extends javax.swing.JFrame {
         super("Transaction Menu");
         initComponents();
         
-        TransactionMenu.obj = obj;  // or this.obj = obj;
+        TransactionMenu.obj = obj;                                  // or this.obj = obj;
         
-        jLabel2.setText("Hello "+obj.getName().toUpperCase());
+        jLabel2.setText("Hello "+obj.getName().toUpperCase());      // set Holder Name in uppercase
         
     }
     
@@ -238,6 +238,7 @@ public class TransactionMenu extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+            // 'Logout' button code
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
@@ -245,6 +246,7 @@ public class TransactionMenu extends javax.swing.JFrame {
         o.setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
 
+            // 'Exit' button code
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
         int s = JOptionPane.showConfirmDialog(null, "Are you sure? you want to exit...", "ATM Management System", JOptionPane.OK_CANCEL_OPTION);
@@ -252,6 +254,8 @@ public class TransactionMenu extends javax.swing.JFrame {
             System.exit(0);
     }//GEN-LAST:event_jButton8ActionPerformed
 
+             // code according to TransactionMenu
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         setVisible(false);

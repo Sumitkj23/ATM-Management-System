@@ -15,7 +15,7 @@ import helper.validateSignupData;
  */
 public class Signup_form2 extends javax.swing.JFrame {
     
-    static UserAccount_entity obj;     // since main method static.. so, constructor argument should also be static
+    static UserAccount_entity obj;     // since main method static... so, constructor argument should also be static
 
     /**
      * Creates new form Signup_form1
@@ -23,19 +23,21 @@ public class Signup_form2 extends javax.swing.JFrame {
      */
     
     
-    // call.. when Signup_form1 -> Next     or      when Signup_form3 -> Back
+    // call...  when click on   Signup_form1 -> Next     or     Signup_form3 -> Back
     public Signup_form2(UserAccount_entity o) {    
         super("New Account Application Form 2");
         initComponents();
         
         Signup_form2.obj = o;       // or this.obj = o;
         
-        setData();
+        setData();                  // set all previous entered data in fields
         
     }
 
-    public void getData()    // store all Signup_form2's entered data
-    {   
+    // Signup_form2 -> next button      to holds all the data enterd in Signup_form2
+    public void getData()
+    {
+        // using setters ('helper' package 'UserAccount_entity.java')   
         
         obj.setAadhar(jTextField1.getText());
         obj.setContact(jTextField2.getText());
@@ -49,7 +51,9 @@ public class Signup_form2 extends javax.swing.JFrame {
         
     }
     
-    // set all data into Signup_form2's field,  when you back from Signup_form3 or you are coming from Signup_form1
+    // this method calls by constructor, when you back from 'Signup_form3' or you are coming from 'Signup_form1'
+    // for retrive all the previous enterd data and set all these data into Signup_form2's field
+    // using getters('helper' package 'UserAccount_entity.java')
     public void setData()   
     {
         jLabel2.setText(obj.getFormNO());
@@ -57,6 +61,7 @@ public class Signup_form2 extends javax.swing.JFrame {
         jTextField1.setText(obj.getAadhar());
         jTextField2.setText(obj.getContact());
         
+        // when 1st time call this method, then set by deafault security question as "What is your Nickname"
         if(obj.getSec_ques() == null)
             jComboBox1.setSelectedIndex(0);
         else
@@ -65,6 +70,7 @@ public class Signup_form2 extends javax.swing.JFrame {
         jTextField3.setText(obj.getSec_ans());
         jTextField4.setText(obj.getEmail());
         
+        // when 1st time call this method, then set by deafault Occupation as "Salaried"
         if(obj.getOccupation() == null)
             jComboBox2.setSelectedIndex(0);
         else
@@ -285,20 +291,24 @@ public class Signup_form2 extends javax.swing.JFrame {
 
     
     // if you enter the data into Signup_form2, then it will be store if you click on "next" button or "back" button
-                        // back button code
+    
+            // 'Back' button code
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        getData();    // store all the Signup_form2's data
+        getData();    // holds all the entered data from 'Signup_form1' and 'Signup_form2'
         
         setVisible(false);
         Signup_form1 o = new Signup_form1(obj);
         o.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+            // 'Next' button code
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        getData();    // store all the Signup_form2's data
+        getData();    // holds all the entered data from 'Signup_form1' and 'Signup_form2'
         
+        // validate entered data
+        // In 'Helper' package, 'validateSignupData' class having 'Signup_form1Validate(UserAccount_entity)' method
         boolean b = validateSignupData.Signup_form2Validate(obj);
         
         if(b)

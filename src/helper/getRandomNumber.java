@@ -35,10 +35,10 @@ public class getRandomNumber {
         switch (c)      // make 4 digit random number and store into String "str"
         {
             case 0:
-                str = s+ "0000";        // add 0s to make 4 digit number
+                str = "9090";        // add 0s to make 4 digit number
                 break;
             case 1:
-                str = s+ "000";
+                str = s+ "020";
                 break;
             case 2:
                 str = s + "00";

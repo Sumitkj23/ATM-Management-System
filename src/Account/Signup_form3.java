@@ -15,31 +15,33 @@ import javax.swing.JOptionPane;
  */
 public class Signup_form3 extends javax.swing.JFrame {
     
-    static UserAccount_entity obj;
+    static UserAccount_entity obj;      // since main method static... so, constructor argument should also be static
     
-    String card; // stores last 4 digit card number
+    String card;                        // stores last 4 digit card number
 
     /**
      * Creates new form Signup_form1
      */
     
      
-    // call.. when Signup_form2 -> Next     or      when Deposit -> Back
+    // call...  when click on   Signup_form2 -> Next     or     Deposit -> Back
     public Signup_form3(UserAccount_entity obj) {
         super("New Account Application Form 3");
         initComponents();
         
-        Signup_form3.obj = obj;     // or this.obj = obj;
+        Signup_form3.obj = obj;             // or this.obj = obj;
         
-        jCheckBox1.setEnabled(false);
+        jCheckBox1.setEnabled(false);      // checkbox 'ATM CARD' set disable
         
-        setData();
+        setData();                         // set all previous entered data in fields
         
     }
 
-    
-    public void getData()    // store all Signup_form3's entered data
+    // Signup_form3 -> next button      to holds all the data enterd in Signup_form3
+    public void getData()
     {
+        // using setters ('helper' package 'UserAccount_entity.java') 
+        
         String s = null;
         
         if(jRadioButton3.isSelected())
@@ -69,23 +71,27 @@ public class Signup_form3 extends javax.swing.JFrame {
         obj.setService(s1);
         
         // ------ in package "helper" class "getRandomNumber" having static method "generate4DigitCode()" --------
+        // it generates 4 digit random number
         
-                                           //generate account number
+                              //generate 13-digit account number (start with 7)
         String acc_num = "7" + getRandomNumber.generate4DigitCode() + getRandomNumber.generate4DigitCode() + getRandomNumber.generate4DigitCode();
         obj.setAccNo(acc_num);
         
-                    // generate card number (start with 1210 - 5103)
+                              // generate 12-digit card number (start with 1210 - 5103)
         String card_num = "1210 - 5103 - " + getRandomNumber.generate4DigitCode() +" - "+ card;
         obj.setCardNo(card_num);
         
-        String pin = getRandomNumber.generate4DigitCode();      // generate 4-digit pin number
+                              // generate 4-digit pin number
+        String pin = getRandomNumber.generate4DigitCode();
         obj.setPinNo(pin);
         
     }
     
-    // set all data into Signup_form3's field,  when you back from Diposite, or you are coming from Signup_form2
+    // call by costructor,  when you back from 'Diposit', or you are coming from 'Signup_form3'
+    // for retrive all the previous enterd data and set all these data into Signup_form3's field
+    // using getters('helper' package 'UserAccount_entity.java')
     public void setData()
-    {
+    {   
         jLabel2.setText(obj.getFormNO());
         
         if("Saving Account".equals(obj.getAccType()))
@@ -97,11 +103,11 @@ public class Signup_form3 extends javax.swing.JFrame {
         else if("Recurring Deposite Account".equals(obj.getAccType()))
             jRadioButton6.setSelected(true);
         
-        // last 4 digit card number
+        // set last 4 digit card number
         String s2 = jLabel10.getText();
         card = getRandomNumber.generate4DigitCode();    // generate last 4 digit card number
-        s2 = s2 + "XXXX - "+ card;      // print card number
-        jLabel10.setText(s2);
+        s2 = s2 + "XXXX - "+ card;
+        jLabel10.setText(s2);                           // print card number
         
     }
 
@@ -430,23 +436,24 @@ public class Signup_form3 extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-                            // back button code
+    // if you enter the data into Signup_form3, then it will be store if you click on "Next" button or "Back" button
+    
+                            // 'Back' button code
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
-        getData();          // store all the Signup_form3's data
+        getData();          // holds all the entered data from 'Signup_form1', 'Signup_form2' and 'Signup_form3'
         
         setVisible(false);
         Signup_form2 o = new Signup_form2(obj);
         o.setVisible(true);
         
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    // if you enter the data into Signup_form3, then it will be store if you click on "next" button or "back" button
-                        // Next botton code
+ 
+                        // 'Next' button code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        getData();    // store all the Signup_form3's data
+        getData();    // holds all the entered data from 'Signup_form1', 'Signup_form2' and 'Signup_form3'
         
         if(obj.getAccType() == null)
             JOptionPane.showMessageDialog(null, "Plese Choose Account Type");
@@ -460,7 +467,7 @@ public class Signup_form3 extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
-            // ---------------- set one button enable at a time ---------------------
+            // ---------------- set only one 'Radio button' enable at a time ---------------------
     
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         // TODO add your handling code here:

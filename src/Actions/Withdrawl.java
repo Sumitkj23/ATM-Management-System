@@ -16,14 +16,14 @@ import javax.swing.JOptionPane;
  */
 public class Withdrawl extends javax.swing.JFrame {
     
-    static AccountDetails_entity obj;
+    static AccountDetails_entity obj;       // since main method static... so, constructor argument should also be static
 
-    String withdrawl, pin;      //textfield
-    int WithdrawlAmmount;        // withdraw convert into int
+    String withdrawl, pin;                  // storing the entered data from corresponding jTextfield
+    int WithdrawlAmmount;                   // store 'Withdrawl Ammount' in int format
     
-    String LastTransactionAmmount;
-    String LastTransactionDate;
-    int CurrentAccountBalance;     // from obj
+    String LastTransactionAmmount;          // store 'Last Transaction Ammount' from obj(AccountDetails_entity)
+    String LastTransactionDate;             // store 'Last Transaction Date' from obj(AccountDetails_entity)
+    int CurrentAccountBalance;              // store 'Current Account Balance' from obj(AccountDetails_entity)
     
     /**
      * Creates new form Withdraw
@@ -33,26 +33,27 @@ public class Withdrawl extends javax.swing.JFrame {
         super("Withdrawl Ammount");
         initComponents();
         
-        Withdrawl.obj = obj;        // this.obj = obj;
+        Withdrawl.obj = obj;                // or this.obj = obj;
         
-        jLabel2.setText(obj.getName());
-        jLabel4.setText(obj.getCardNo());
+        jLabel2.setText(obj.getName());     // set 'Account Holder Name' in jLabel2
+        jLabel4.setText(obj.getCardNo());   // set 'Card Number' in jLabel4
         
-        LastTransactionAmmount = obj.getLastTransaction();
-        LastTransactionDate = obj.getTransactionDate();
+        LastTransactionAmmount = obj.getLastTransaction();      // holds 'Last Transaction Ammount'
+        LastTransactionDate = obj.getTransactionDate();         // holds 'Last Transaction Date'
 
     }
 
+            // validate to all enterd data
     boolean validateData()
     {
         boolean b = false;
         
-        CurrentAccountBalance = Integer.parseInt(obj.getAccBalance());
+        CurrentAccountBalance = Integer.parseInt(obj.getAccBalance());  // holds 'Current Account Balance' in int format
         
-        withdrawl = jTextField2.getText().trim();
-        pin = jTextField3.getText();
+        withdrawl = jTextField2.getText().trim();           // holds 'Withdrawl Ammount' from jTextfield2
+        pin = jPasswordField1.getText();                    // holds 'Pin' from jTextfield3
         
-        try{
+        try{                                                // try to hold 'Withdrawl Ammount' in integer format
             WithdrawlAmmount = Integer.parseInt(withdrawl);
         }catch(NumberFormatException e)
         {
@@ -60,11 +61,11 @@ public class Withdrawl extends javax.swing.JFrame {
             return b;
         }
         
-        if(!pin.equals(obj.getPin()))
+        if(!pin.equals(obj.getPin()))                       // check entered 'Pin' number match with database or not
             JOptionPane.showMessageDialog(null, "Plese Enter Correct Pin Number");
-        else if(WithdrawlAmmount%100 != 0)
+        else if(WithdrawlAmmount%100 != 0)                  // check 'Withdrawl Ammount' is to be multiple of 100 or not
             JOptionPane.showMessageDialog(null, "Plese Enter Valid Ammount");
-        else if(WithdrawlAmmount > CurrentAccountBalance)
+        else if(WithdrawlAmmount > CurrentAccountBalance)   // check 'Withdrawl Ammount' is less than 'Current Account Balance' or not
             JOptionPane.showMessageDialog(null, "Insufficient Balance");
         else
             b = true;
@@ -88,11 +89,11 @@ public class Withdrawl extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jPasswordField1 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,8 +116,6 @@ public class Withdrawl extends javax.swing.JFrame {
         jLabel6.setText("(Minimum Ammount should be 100 Rs.)");
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
-
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel7.setText("Rs.");
@@ -144,6 +143,8 @@ public class Withdrawl extends javax.swing.JFrame {
             }
         });
 
+        jPasswordField1.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -163,8 +164,8 @@ public class Withdrawl extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(jLabel8)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextField3))
+                                        .addGap(21, 21, 21)
+                                        .addComponent(jPasswordField1))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(jLabel5)
                                         .addGap(18, 18, 18)
@@ -201,11 +202,11 @@ public class Withdrawl extends javax.swing.JFrame {
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
-                .addGap(23, 23, 23)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                    .addComponent(jLabel8)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -216,27 +217,32 @@ public class Withdrawl extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+            // 'Submit' button code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        if(validateData())
+        if(validateData())      // check entered jTextFields data valid or not
         {
+                 // set 'New Account Balance' or 'Update Account Balance'
             obj.setAccBalance(Integer.toString(CurrentAccountBalance-WithdrawlAmmount));
-            obj.setLastTransaction("-"+withdrawl);
             
-            Date d = new Date();        // for update date and time
+            obj.setLastTransaction("-"+withdrawl);      // set 'Last Transaction Ammount'
+            
+            Date d = new Date();                        // for update date & time ('Last Transaction')
             SimpleDateFormat df = new SimpleDateFormat("dd MMMM, yyyy  hh:mm a");
             String date = df.format(d);
-            obj.setTransactionDate(date);
+            obj.setTransactionDate(date);               // set 'Last Transaction' date & time
             
-            if(OperationsInDatabase.updateAccountBalance(obj))     // update CurrentAccountBalance
+            // in 'Action' package 'OperationsInDatabase' class having static method 'updateAccountBalance'
+            // for update 'Account Balance', 'Last Transaction Ammount' and 'Transaction Date' in 'AccountDetails' table
+            if(OperationsInDatabase.updateAccountBalance(obj))
             {
                 setVisible(false);
                 JOptionPane.showMessageDialog(null, "Withrawl Successfully");
                 
-                Receipt o = new Receipt(obj);      // open receipt 
+                Receipt o = new Receipt(obj);      // if 'Withrawl Successfully' then open 'Receipt.java'
                 o.setVisible(true);
             }
-            else        // if transacation failed, set 'previous accbalance' and 'last transAmmount'
+            else        // if transacation failed, set previously holded 'AccountBalance', 'TransactionAmmount' and 'Transaction Date'
             {
                 obj.setAccBalance(Integer.toString(CurrentAccountBalance));
                 obj.setLastTransaction(LastTransactionAmmount);
@@ -247,6 +253,7 @@ public class Withdrawl extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+            // 'Back' button code
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
@@ -301,7 +308,7 @@ public class Withdrawl extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }

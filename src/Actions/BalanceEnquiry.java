@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class BalanceEnquiry extends javax.swing.JFrame {
     
-    static AccountDetails_entity obj;
+    static AccountDetails_entity obj;       // since main method static... so, constructor argument should also be static
 
     /**
      * Creates new form Receipt
@@ -24,10 +24,11 @@ public class BalanceEnquiry extends javax.swing.JFrame {
         super("Balance Enquiry");
         initComponents();
         
-        BalanceEnquiry.obj = obj;      // or this.obj = obj;
-        setData();
+        BalanceEnquiry.obj = obj;          // or this.obj = obj;
+        setData();                         // for set all data in corresponding jLabel
     }
 
+    // set all transaction data in corresponding jLabel
     void setData()
     {
         jLabel2.setText(obj.getName());
@@ -37,9 +38,9 @@ public class BalanceEnquiry extends javax.swing.JFrame {
         
         int LastTransactionAmmount = Integer.parseInt(obj.getLastTransaction());
         
-        if(LastTransactionAmmount < 0)
+        if(LastTransactionAmmount < 0)                          // for checking 'Last Transaction' is 'Withdrawl' or 'Deposit'
         {
-            LastTransactionAmmount = -LastTransactionAmmount;
+            LastTransactionAmmount = -LastTransactionAmmount;   // set 'LastTransactionAmmount' as +ve if last transaction performed as 'Withdrawl'
             jLabel11.setText("Withdrawl");
         }
         else
@@ -210,6 +211,7 @@ public class BalanceEnquiry extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+            // 'Back' button code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
@@ -217,6 +219,7 @@ public class BalanceEnquiry extends javax.swing.JFrame {
         o.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+            // 'Exit' button code
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         int i = JOptionPane.showConfirmDialog(null, "Are You Sure, You Want To Exit??", "ATM Management System", JOptionPane.YES_NO_OPTION);

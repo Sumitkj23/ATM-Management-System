@@ -9,6 +9,8 @@ package helper;
  *
  * @author Sumit Kumar
  */
+
+    // getters & setters for 'AccountDetails' table
 public class AccountDetails_entity {
     
     private String cardNo;

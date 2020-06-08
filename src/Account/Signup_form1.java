@@ -15,38 +15,41 @@ import helper.validateSignupData;
  */
 public class Signup_form1 extends javax.swing.JFrame {
     
-    String str;     // stores form number
+    String str;                                           // for storing form number
     UserAccount_entity obj = new UserAccount_entity();    // for storing all form data
 
     /**
      * Creates new form Signup_form1
      */
-    public Signup_form1() {     // call when login successfully
+    
+            // constructor calls, when click on 'Signup' button from 'Login.java' 
+    public Signup_form1() {
         super("New Account Application Form 1");
         initComponents();
         
-        // in package "helper" class "getRandomNumber" having static method "generate4DigitCode()"
-        str = getRandomNumber.generate4DigitCode();     // for form number
+        // In "helper" package "getRandomNumber" class having static method "generate4DigitCode() for generate 4 digit random number"
+        str = getRandomNumber.generate4DigitCode();     // stores form number
         
         jLabel2.setText(str);       // set form number
-        
     }
 
-    // call when click "back" button from "Signup_form2"
-    public Signup_form1(UserAccount_entity obj) {      // get "Signup_form2" data with "Signup_form1" data by "obj"
+            // constructor calls, when click "back" button from "Signup_form2.java"
+    public Signup_form1(UserAccount_entity obj) {      // get "Signup_form2" data with "Signup_form1" data from "obj"
         super("New Account Application Form");
         initComponents();
         
         this.str = obj.getFormNO();
-        this.obj = obj;         // get the reference of an object
+        this.obj = obj;             // get the reference of an object
         
-        setData();      // set all previous data
+        setData();                  // set all previous entered data
     }
 
-    // Signup_form1 -> next button      for save all the enterd data from Signup_form1
-    public void getData()        //pass all "Signup_form1" data into "UserAccount_entity" object "obj"
+    // Signup_form1 -> next button      to holds all the data enterd in Signup_form1 
+    public void getData()
     {   
-        obj.setFormNO(str);
+        // using setters ('helper' package 'UserAccount_entity.java')
+        
+        obj.setFormNO(str);                 // holds form number
         obj.setName(jTextField1.getText());
         
         obj.setDate(Integer.parseInt((String)jComboBox1.getSelectedItem()));
@@ -75,9 +78,10 @@ public class Signup_form1 extends javax.swing.JFrame {
         
     }
     
-    //Signup_form2 -> back button code      this method will call in costructor... when back button press from Signup_form2
-    //for retrive all the enterd data in Signup_form1
-    public UserAccount_entity setData()    // set all data in "Signup_form1" when you back from "Signup_form2"
+    // Signup_form2 -> back button code    this method will call in costructor... when 'Back' button pressed from 'Signup_form2'
+    // for retrive all the previous enterd data from obj and set all these data in 'Signup_form1.java' fields
+    // using getters('helper' package 'UserAccount_entity.java') 
+    public void setData()    
     {   
         jLabel2.setText(obj.getFormNO());
         
@@ -100,7 +104,6 @@ public class Signup_form1 extends javax.swing.JFrame {
         
         jTextField6.setText(obj.getState());
         
-        return obj;
     }
     
 
@@ -410,12 +413,14 @@ public class Signup_form1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-                // Next button code
+                // 'Next' button code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
-        getData();    // store all the entered data from Signup_form1 
+        getData();    // holds all the entered data from Signup_form1 
         
+        // validate entered data
+        // In 'Helper' package, 'validateSignupData' class having 'Signup_form1Validate(UserAccount_entity)' method
         boolean b = validateSignupData.Signup_form1Validate(obj);
         
         if(b)
@@ -425,9 +430,8 @@ public class Signup_form1 extends javax.swing.JFrame {
             o.setVisible(true);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    
-    // back button code
+   
+            // 'Back' button code
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
@@ -435,7 +439,7 @@ public class Signup_form1 extends javax.swing.JFrame {
         o.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    // clear button code
+            // 'Clear' button code
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         jTextField1.setText("");
@@ -453,17 +457,17 @@ public class Signup_form1 extends javax.swing.JFrame {
         jTextField5.setText("");
         jTextField6.setText("");
         
-        jTextField1.requestFocus();     // after clear focus on first field
+        jTextField1.requestFocus();     // after clear, focus on first field
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    // ---------------- code for, if select "Male" then radio button "Female" not be selected---------------------
+    // ---------------- code for, if select "Male" then radio button "Female" not be select---------------------
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
         if(jRadioButton1.isSelected())
             jRadioButton2.setSelected(false);
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
-    // ---------------- code for, if select "Female" then radio button "Male" not be selected---------------------
+    // ---------------- code for, if select "Female" then radio button "Male" not be select---------------------
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         // TODO add your handling code here:
         if(jRadioButton2.isSelected())

@@ -23,12 +23,14 @@ public class OperationsInDatabase {
     static PreparedStatement pst;
     static ResultSet rs;
     
+    // call from 'Submit' button, 'Deposit' class of 'Account' package
     public static boolean saveIntoUser(UserAccount_entity obj)
     {
         boolean b = false;
         
-        conn = javaConnect.connectDb();
+        conn = javaConnect.connectDb();             // connection with database
         
+        // 'Query' for insert data into 'UserAccount' table
         String sql = "insert into UserAccount(FormNo, Name, F_Name, Date, Month, Year, Gender, Address, City, Pincode, State, AadharNo, ContactNo, Sec_Ques, Sec_Ans, Email, Occupation, Account_No, Acc_Type, Card_Num, Pin_Num, Services, CurrentDate) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         try
         {
@@ -73,10 +75,12 @@ public class OperationsInDatabase {
         return b;
     }
     
+    // call from 'Submit' button, 'Deposit' class of 'Account' package
     public static boolean saveIntoAccountDetails(UserAccount_entity obj)
     {
         boolean b = false;
         
+        // 'Query' for insert data into 'AccountDetails' table
         String sql = "insert into AccountDetails(AccountNo, AccountType, HolderName, CardNo, Pin, AccountBalance, LastTransaction, TransactionDate) values(?,?,?,?,?,?,?,?)";
         
         try
@@ -89,9 +93,9 @@ public class OperationsInDatabase {
             pst.setString(3, obj.getName());
             pst.setString(4, obj.getCardNo());
             pst.setString(5, obj.getPinNo());
-            pst.setString(6, obj.getDepositeAmmount()); // account balance
-            pst.setString(7, obj.getDepositeAmmount()); // last transaction
-            pst.setString(8, obj.getCurrentdate());
+            pst.setString(6, obj.getDepositeAmmount());         // set 'Current Account Balance'
+            pst.setString(7, obj.getDepositeAmmount());         // set 'Last Transaction'
+            pst.setString(8, obj.getCurrentdate());             // set 'Last Transaction Date & time'
             
             pst.execute();
             
@@ -108,11 +112,14 @@ public class OperationsInDatabase {
         return b;
     }
     
-    // get all data in "AccountDetails" table using CardNumber
+    // call from 'validateLogin()' method, 'Login' class of 'Account' package
+    // for get all data in "AccountDetails" table using CardNumber & pinNumber
     public static AccountDetails_entity getAccountDetails(String cardNumber, String pin)
     {
-        AccountDetails_entity obj = new AccountDetails_entity();
+        // having getters & setters, 'AccountDetails_entity' class of 'Helper' package
+        AccountDetails_entity obj = new AccountDetails_entity();        // holds 'Account Details' information
         
+        // Query for fetching 'Account Details Information' from 'AccountDetails' table
         String sql = "select * from AccountDetails where CardNo='"+cardNumber+"' and Pin='"+pin+"'";
         try
         {
@@ -122,6 +129,7 @@ public class OperationsInDatabase {
             
             if(rs.next())
             {
+                // set 'Account Information' using setters('AccountDetails_entity' class, 'Helper' package)
                 obj.setCardNo(cardNumber);
                 obj.setPin(pin);
                 obj.setAccountNo(rs.getString("AccountNo"));
@@ -144,9 +152,12 @@ public class OperationsInDatabase {
         return obj;
     }
     
+    // call from 'Submit' button, 'Deposit' class of 'Actions' package
     static boolean updateAccountBalance(AccountDetails_entity obj)
     {
         boolean b =false;
+        
+        // Query for Update 'AccountBalance', 'LastTransactionAmmount' and 'LastTransactionDate' in 'AccountDetails' table
         String sql = "update AccountDetails set AccountBalance='"+obj.getAccBalance()+"', LastTransaction='"+obj.getLastTransaction()+"', TransactionDate='"+obj.getTransactionDate()+"' where CardNo='"+obj.getCardNo()+"'";
         
         try
@@ -167,9 +178,13 @@ public class OperationsInDatabase {
         return b;
     }
     
+    // call from 'ChangePin(AccountDetails_entity)' constructor, 'ChangePin' class of 'Actions' package
+    // for fetching 'Security Question' and set into corresponding jLabel
     public static String getSecurityQuestion(String cardNum)
     {
         String ques = null;
+        
+        // Query for fetching 'Security Question' from 'UserAccount' table
         String sql = "select Sec_Ques from UserAccount where Card_Num='"+cardNum+"'";
         try
         {
@@ -191,9 +206,13 @@ public class OperationsInDatabase {
         return ques;
     }
     
+    // call from 'validateData()' method, 'ChangePin' class of 'Actions' package
+    // for fetching 'Security Answer' and match with entered 'SecurityAnswer'
     public static String getSecurityAnswer(String cardNum)
     {
         String ans = null;
+        
+        // Query for fetching 'Security Answer' from 'UserAccount' table
         String sql = "select Sec_Ans from UserAccount where Card_Num='"+cardNum+"'";
         try
         {
@@ -215,10 +234,13 @@ public class OperationsInDatabase {
         return ans;
     }
     
+    // call from 'Submit' button, 'ChangePin' class of 'Actions' package
+    // for Update 'Pin Number' in database as well as current 'Login session'
     public static boolean updatePin(String cardNum, String pin)
     {
         boolean b = false;
         
+        // Query for Update 'Pin Number' in 'AccountDetails' table
         String sql = "update AccountDetails set Pin='"+pin+"' where CardNo='"+cardNum+"'";
         
         try

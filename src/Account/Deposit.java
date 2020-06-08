@@ -17,11 +17,13 @@ import javax.swing.JOptionPane;
  */
 public class Deposit extends javax.swing.JFrame {
     
-    static UserAccount_entity obj;
-    int total;           // store total deposite money (from ammount details)
+    // having getters & setters
+    static UserAccount_entity obj;              // since main method static... so, constructor argument should also be static
+    
+    int total;                                  // store total deposit ammount (from Ammount Details panel)
 
     /**
-     * Creates new form Deposite
+     * Creates new form Deposit
      * @param obj
      */
     public Deposit(UserAccount_entity obj) {
@@ -29,14 +31,17 @@ public class Deposit extends javax.swing.JFrame {
         initComponents();
         this.obj = obj;
         
-        jLabel2.setText(obj.getFormNO());   // set form number
+        jLabel2.setText(obj.getFormNO());       // set form number
         
     }
     
-    boolean getAmmountDetails()      // store all "Deposit's" entered data
+          // validate(NumberFormatException) and holds 'Total' from 'Ammount Details's' panel
+          // return true if exception(NumberFormatException) didn't occur
+    boolean getAmmountDetails()
     {
         boolean b = true;
         
+                // store Ammount Details
         String two_th = jTextField2.getText().trim();
         String five_hun = jTextField3.getText().trim();
         String two_hun = jTextField4.getText().trim();
@@ -49,10 +54,10 @@ public class Deposit extends javax.swing.JFrame {
         
         try
         {
-            if(!"".equals(two_th))
+            if(!"".equals(two_th))                          // if ammount enters then add with 'Deposit Ammount'
             {
-                int a1 = Integer.parseInt(two_th)*2000;
-                total += a1;
+                int a1 = Integer.parseInt(two_th)*2000;     // try to convert into Integer
+                total += a1;                                // 'Add' ammount with 'Total Deposit Ammount'
                 jLabel15.setText(a1 + " Rs.");
             }
             if(!"".equals(five_hun))
@@ -92,11 +97,11 @@ public class Deposit extends javax.swing.JFrame {
                 jLabel21.setText(a7 + " Rs.");
             }
 
-            jLabel22.setText(Integer.toString(total)+" Rs.");
+            jLabel22.setText(Integer.toString(total)+" Rs.");       // set total in 'jLabel22'
             
-        }catch(Exception e)
+        }catch(Exception e)     // if exception occur then...
         {
-            total = 0;
+            total = 0;          // set total ammount as 0
             b = false;
             JOptionPane.showMessageDialog(null, "Plese Enter Valid Ammount Details");
         }
@@ -104,32 +109,33 @@ public class Deposit extends javax.swing.JFrame {
         return b;
     }
     
+            // validate to all enterd data
     boolean validateData()
     {
         boolean b = false;
         
-        String acc = jTextField1.getText().trim();
-        int depositeAmmount;
+        String acc = jTextField1.getText().trim();      // stores 'Deposite Ammount' in String format
+        int depositeAmmount;                            // stores 'Deposite Ammount' in integer format
         
-        if("".equals(acc))  // if deposite ammount not entered
+        if("".equals(acc))                              // if deposite ammount not entered
         {
             JOptionPane.showMessageDialog(null, "Plese Enter Deposite Ammount");
             jTextField1.requestFocus();
         }
-        else            // if deposite ammount = 0 or give by any string(i.e wrong) 
+        else                                             
         {
             try
             {
-                depositeAmmount = Integer.parseInt(acc);    // if deposite ammount not into int format then exception occur
-                if(depositeAmmount < 500)     // check deposite ammount = 0 or 000000... or <500
+                depositeAmmount = Integer.parseInt(acc);    // try to convet 'Deposite Ammount' into integer format
+                if(depositeAmmount < 500)                   // check deposite ammount = 0 or 000000... or <500
                     JOptionPane.showMessageDialog(null, "Minimun Deposite Ammount should be 500 Rs.\n So, Plese Enter Valid Deposite Ammount");
                 else
                 {
-                    if(getAmmountDetails())
+                    if(getAmmountDetails())                 // validate and generate 'total' from "Ammount Details" panel
                     {
-                        if(depositeAmmount == total)
+                        if(depositeAmmount == total)        // check, Deposite Ammount == Total Ammount Details
                         {
-                            obj.setDepositeAmmount(acc);
+                            obj.setDepositeAmmount(acc);    // using settter to hold 'Deposite Ammount'
                             b = true;
                         }
                         else
@@ -492,23 +498,27 @@ public class Deposit extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
             
-                    // total button code,       for set info into label
+                    // 'Total' button code      
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        getAmmountDetails();      // display label data
+        getAmmountDetails();      // display 'Ammount' into corresponding labels
     }//GEN-LAST:event_jButton4ActionPerformed
 
-                // submit button code
+                   // 'Submit' button code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
-        if(validateData())          // check validation
+        if(validateData())                      // check validation of entered 'Deposite Ammount' and 'Ammount Details'
         {
-            Date d = new Date();
+            Date d = new Date();                // generate current transaction date and time
             SimpleDateFormat df = new SimpleDateFormat("dd MMMM, yyyy  hh:mm a");
             String date = df.format(d);
-            obj.setCurrentdate(date);
+            obj.setCurrentdate(date);           // holds transaction date & time
 
+            // In 'Action' package 'OperationInDatabase' class having
+            // 'saveIntoUser(UserAccount_entity)' method, for save all the 'Signup' details into database ('UserAccount' table)
+            // 'saveIntoAccountDetails(UserAccount_entity)' method, for save 'Account information & transaction information' 
+            // into database('AccountDetails' table)
             if(OperationsInDatabase.saveIntoUser(obj) && OperationsInDatabase.saveIntoAccountDetails(obj))
             {
                 setVisible(false);
@@ -520,7 +530,7 @@ public class Deposit extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-                // back button code
+                // 'Back' button code
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         setVisible(false);

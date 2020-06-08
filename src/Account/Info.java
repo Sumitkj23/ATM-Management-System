@@ -14,17 +14,18 @@ import javax.swing.JOptionPane;
  */
 public class Info extends javax.swing.JFrame {
     
-    static UserAccount_entity obj;
+    static UserAccount_entity obj;          // since main method static... so, constructor argument should also be static
 
     /**
      * Creates new form Info
      * @param obj
      */
-    public Info(UserAccount_entity obj) {      // all form's data are stored in "obj"
+    public Info(UserAccount_entity obj) {           // all form's data are stored in "obj" so fetch it...
         super("Your Account Inforamtion...");
         initComponents();
         
-        jLabel2.setText(obj.getName());
+            // set corresponding data into jLabel using setters
+        jLabel2.setText(obj.getName());             
         jLabel9.setText(obj.getAccNo());
         jLabel10.setText(obj.getAccType());
         jLabel11.setText(obj.getCardNo());
@@ -209,7 +210,7 @@ public class Info extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-                        // exit button code
+                        // 'Exit' button code
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         int i = JOptionPane.showConfirmDialog(null, "Confirm You Want To Exit???", "ATM Management System", JOptionPane.YES_NO_OPTION);

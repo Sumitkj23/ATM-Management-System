@@ -15,9 +15,9 @@ import javax.swing.JPasswordField;
  */
 public class ChangePin extends javax.swing.JFrame {
     
-    static AccountDetails_entity obj;
+    static AccountDetails_entity obj;       // since main method static... so, constructor argument should also be static
     
-    String newPin;
+    String newPin;                          // for holding 'New Pin'
 
     /**
      * Creates new form ChangePin
@@ -27,50 +27,54 @@ public class ChangePin extends javax.swing.JFrame {
         super("Change Pin...");
         initComponents();
         
-        ChangePin.obj= obj;    // this.obj = obj;
+        ChangePin.obj= obj;               // this.obj = obj;
         
-        jLabel1.setText("Hello "+obj.getName().toUpperCase());
-        jLabel7.setText(obj.getCardNo());
+        jLabel1.setText("Hello "+obj.getName().toUpperCase());      // set 'Account Holder Name' in Uppercase letter
+        jLabel7.setText(obj.getCardNo());                           // set 'Card Number'
         
+        // in 'Action' package, 'OperationsInDatabase' class having static method 'getSecurityQuestion(String)'
+        // for fetching 'Security Question' from 'UserAccount' table
         jLabel8.setText(OperationsInDatabase.getSecurityQuestion(obj.getCardNo()));
     }
     
+    // validate to all enterd data
     boolean validateData()
     {
         boolean b = false;
         
-        String secAns = jTextField1.getText().trim();
-        newPin = jPasswordField2.getText();
+        String secAns = jTextField1.getText().trim();       // stores entered 'Security Answer'
+        newPin = jPasswordField2.getText();                 // holds entered 'New Pin'
         
-        // class 'OperationsInDatabase' having 'getSecurityAnswer(CardNumber)' return sec_ans
-        // check answer
+        // in 'Actions' package, class 'OperationsInDatabase' having 'getSecurityAnswer(CardNumber)'
+        // for  fetching 'Security Answer' from 'UserAccount' table and return it
+        // check 'Security Answer' match with 'Entered Security Answer' or not
         if(!secAns.equalsIgnoreCase(OperationsInDatabase.getSecurityAnswer(obj.getCardNo())))
         {
             JOptionPane.showMessageDialog(null, "Plese Fill Correct Security Answer");
             jTextField1.requestFocus();
         }
-        else if(jPasswordField1.getText().length() == 0)
+        else if(jPasswordField1.getText().length() == 0)                // check 'Current Pin' enterd or not
         {
             JOptionPane.showMessageDialog(null, "Plese Enter Your Current Pin");
             jPasswordField1.requestFocus();
         }
-        else if(!jPasswordField1.getText().equals(obj.getPin())) // check current pin enterd correctly or not
+        else if(!jPasswordField1.getText().equals(obj.getPin()))        // check 'Current Pin' enterd correctly or not
         {
                 JOptionPane.showMessageDialog(null, "Plese Enter Correct Current Pin");
                 jPasswordField1.requestFocus();
         }
-        else if( newPin.length() != 4)
+        else if( newPin.length() != 4)                                  // check 'New Pin' entered or not
         {
             JOptionPane.showMessageDialog(null, "Plese Enter 4-digit New Pin");
             jPasswordField2.requestFocus();
         }
         else
         {
-            try
+            try             // if new pin entered as '  22' then also exception occur, it can't be convert into integer format
             {
-                Integer.parseInt(newPin);
+                Integer.parseInt(newPin);           // try to convert entered 'New Pin' in integer format
                 b = true;
-            }catch(NumberFormatException e) // if exception occur then return 'false' directly
+            }catch(NumberFormatException e)         // if exception occur then return 'false' directly
             {
                 JOptionPane.showMessageDialog(null, "Plese Enter Valid 4-digit New Pin");
                 jPasswordField2.requestFocus();
@@ -223,6 +227,7 @@ public class ChangePin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+            // 'Back' button code
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
@@ -230,25 +235,31 @@ public class ChangePin extends javax.swing.JFrame {
         o.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+            // 'Submit' button code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        if(validateData())
+        if(validateData())                                    // check entered jTextFields data valid or not
         {
-            JPasswordField n_pin = new JPasswordField();
+            JPasswordField n_pin = new JPasswordField();      // for set JoptionPane input field
+            
+            // in JOptionPane, set password field for taking input
             int i = JOptionPane.showConfirmDialog(null, n_pin, "Plese Confirm Your New 4-Digit Pin",JOptionPane.OK_OPTION);
             
             if(i == 0)
             {
-                String confirm_pin = n_pin.getText();
+                String confirm_pin = n_pin.getText();        // holds entered 'Confirm Pin'
                 
                 try
                 {
-                    Integer.parseInt(confirm_pin);
+                    Integer.parseInt(confirm_pin);          // 'Confirm Pin' try to convert in integer format
                     
-                    if(newPin.equals(confirm_pin))
+                    if(newPin.equals(confirm_pin))          // check 'Entered Pin Number' is equal to 'Confirm Pin' or not
                     {
+                        // in 'Actions' package, 'OperationsInDatabase' class having 'updatePin(CardNumber, NewPin)' method
+                        // for Update pin in 'AccountDetails' table
                         if(OperationsInDatabase.updatePin(obj.getCardNo(), newPin))
                         {
+                            // if 'Pin' change successfully then set this Pin in database as well as current 'Login Session'
                             obj.setPin(newPin);
 
                             setVisible(false);
@@ -257,13 +268,13 @@ public class ChangePin extends javax.swing.JFrame {
                             TransactionMenu o = new TransactionMenu(obj);
                             o.setVisible(true);
                         }
-                        else
+                        else                            // if 'Pin' does not update in database
                             JOptionPane.showMessageDialog(null, "OOps! Something Went Wrong \n Plese Try Again Later");
                     }
-                    else
+                    else                                // if 'Entered Pin' does not match with 'Confirm Pin'
                         JOptionPane.showMessageDialog(null, "Pin Not Match");
                 }
-                catch(NumberFormatException e)
+                catch(NumberFormatException e)          // if 'Confirm Pin' can't be convert into Integer format
                 {
                     JOptionPane.showMessageDialog(null, "         Pin Not Match... \nPlese Enter Valid 4-digit Pin");
                 }
