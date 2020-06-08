@@ -8,10 +8,6 @@ package Account;
 import Actions.OperationsInDatabase;
 import Actions.TransactionMenu;
 import helper.AccountDetails_entity;
-import helper.javaConnect;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -21,74 +17,87 @@ import javax.swing.JOptionPane;
  */
 public class Login extends javax.swing.JFrame {
     
-    AccountDetails_entity obj = new AccountDetails_entity();
-    String cardNo;
+        // helper package, having getter and setter
+    AccountDetails_entity obj = new AccountDetails_entity();        // holds 'Account Details' information
     
-    Connection conn;
-    PreparedStatement pst;
-    ResultSet rs;
+    String cardNo;      // storing card number in 'xxxx - xxxx - xxxx - xxxx' format
+    String pin;         // storing 4-digit pin number
+    
 
     /**
      * Creates new form Login
      */
     public Login() {
-        super("ATM Management System");
+        super("ATM Management System");              
         initComponents();
         
-        jLabel3.setIcon(new ImageIcon("img/ATM.jpg"));   // set image on jLabel3
+        jLabel3.setIcon(new ImageIcon("img/ATM.jpg"));          // set image on jLabel3
     }
 
+    // method for taking cardNumber in 'xxxxxxxxxxxxxxxx' format and return into 'xxxx - xxxx - xxxx - xxxx' format
     String getCardNumber()      
     {
         char[] str = jTextField1.getText().toCharArray();       // take text and convert into char array 
                
-        String cardNo = "";                 // for storing the card number
+        String cardNo = "";                                     // for storing the card number
         
-        for(int i =0 ; i < str.length; i++)
+        for(int i =0 ; i < str.length; i++)                     // traverse array
         {
-            if((i == 4) || (i == 8 || (i == 12)))
-                cardNo += " - "+str[i];     // add string " - "
+            if((i == 4) || (i == 8 || (i == 12)))               // for adding string ' - ' 
+                cardNo += " - "+str[i];                         // add string " - "
             else
                 cardNo += str[i];
         }
         return cardNo;
     }
     
-    
+    // validate login data
     boolean validateLogin()
     {
         boolean b = false;
         
-           // check card number 16 digit or not    and pin have 4 digits or not
-        if(jTextField1.getText().trim().length() == 16 && jPasswordField1.getText().trim().length() == 4)        
+        pin = jPasswordField1.getText();                       // holds 'Pin Number'
+        
+           // check 'Card Number' having 16 digit or not    
+        if(jTextField1.getText().trim().length() != 16)
         {
-            cardNo = getCardNumber();
-            String pin = jPasswordField1.getText();
-
-            String sql = "select * from AccountDetails where CardNo='"+cardNo+"' and Pin='"+pin+"'";
-
+            JOptionPane.showMessageDialog(null, "Plese Enter Your 16-Digit Card Number");
+            jTextField1.requestFocus();
+        }
+           // check 'Pin Number' having 4 digits or not
+        else if(pin.length() != 4)
+        {
+            JOptionPane.showMessageDialog(null, "Plese Enter Your 4-Digit Pin Number");
+            jPasswordField1.requestFocus();
+        }
+        else
+        {
             try
             {
-                conn = javaConnect.connectDb();
-                pst = conn.prepareStatement(sql);
-                rs = pst.executeQuery();
-
-                if(rs.next())
+                Integer.parseInt(pin);              // try to convert 'Pin Number' into integer format
+            
+                cardNo = getCardNumber();           // holds 'Card Number'
+                
+                // "OperationsInDatabase" class in Actions package having method 'getAccountDetails(CardNumber, Pin)'
+                // this method fetch the data from 'AccountDetails' table (having Account Information)
+                // and set into 'AccountDetails_entity'(helper package) object using getters and setters
+                // then it returns 'AccountDetails_entity' ref...
+                obj = OperationsInDatabase.getAccountDetails(cardNo, pin);
+                
+                if(obj.getName() == null)           // check 'Card Number' & 'Pin Number' match with database or not
                 {
-                    b = true;
-                    
-                    // "OperationsInDatabase" class in Actions package 
-                    // having method getData and it return AccountDetails_entity ref...
-                    obj = OperationsInDatabase.getData(cardNo);     
+                    JOptionPane.showMessageDialog(null, "Card Number Or Pin Number Not Correct\n         Plese Enter Valid Details...");
+                    jPasswordField1.setText("");
+                    jTextField1.requestFocus();
                 }
-                
-                rs.close();
-                pst.close();
-                conn.close();
-                
-            }catch(Exception e)
+                else
+                    b = true;
+            }
+            catch(NumberFormatException e)          // if 'Pin Number' does not in integer format
             {
-                JOptionPane.showMessageDialog(null, e);
+                JOptionPane.showMessageDialog(null, "Plese Enter Valid 4-Digit Pin Number");
+                jPasswordField1.setText("");
+                jPasswordField1.requestFocus();
             }
         }
         
@@ -130,9 +139,9 @@ public class Login extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(55, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
@@ -148,7 +157,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -199,31 +208,33 @@ public class Login extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(53, 53, 53)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2)
-                        .addGap(12, 12, 12))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                        .addComponent(jTextField1)))
-                .addContainerGap(63, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(111, 111, 111))
+                .addContainerGap(74, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(53, 53, 53)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton2)
+                                .addGap(12, 12, 12))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jPasswordField1)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48)))
+                .addGap(60, 60, 60))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -237,7 +248,7 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(jButton2))
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -258,7 +269,7 @@ public class Login extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(20, 20, 20)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
@@ -267,6 +278,7 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+            // 'Signup' button code
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
@@ -276,6 +288,7 @@ public class Login extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+            // 'Signin' button code
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         if(validateLogin())
@@ -284,13 +297,9 @@ public class Login extends javax.swing.JFrame {
             TransactionMenu o = new TransactionMenu(obj);
             o.setVisible(true);
         }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "Card Number Or Pin Not Correct\n     Plese Enter Valid Details...");
-            jPasswordField1.setText("");
-        }
     }//GEN-LAST:event_jButton1ActionPerformed
         
+            // 'Clear' button code
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         jTextField1.setText("");
