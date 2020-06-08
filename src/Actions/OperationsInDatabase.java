@@ -11,6 +11,7 @@ import helper.javaConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -66,9 +67,8 @@ public class OperationsInDatabase {
             
         }catch(Exception e)
         {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
         }
-        
         
         return b;
     }
@@ -102,18 +102,18 @@ public class OperationsInDatabase {
             
         }catch(Exception e)
         {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
         }
         
         return b;
     }
     
     // get all data in "AccountDetails" table using CardNumber
-    public static AccountDetails_entity getData(String cardNumber)
+    public static AccountDetails_entity getAccountDetails(String cardNumber, String pin)
     {
         AccountDetails_entity obj = new AccountDetails_entity();
         
-        String sql = "select * from AccountDetails where CardNo='"+cardNumber+"'";
+        String sql = "select * from AccountDetails where CardNo='"+cardNumber+"' and Pin='"+pin+"'";
         try
         {
             conn = javaConnect.connectDb();
@@ -123,7 +123,7 @@ public class OperationsInDatabase {
             if(rs.next())
             {
                 obj.setCardNo(cardNumber);
-                obj.setPin(rs.getString("Pin"));
+                obj.setPin(pin);
                 obj.setAccountNo(rs.getString("AccountNo"));
                 obj.setAccountType(rs.getString("AccountType"));
                 obj.setName(rs.getString("HolderName"));
@@ -138,7 +138,7 @@ public class OperationsInDatabase {
             
         }catch(Exception e)
         {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
         }
         
         return obj;
@@ -161,7 +161,7 @@ public class OperationsInDatabase {
             b = true;
         }catch(Exception e)
         {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
         }
         
         return b;
@@ -185,7 +185,7 @@ public class OperationsInDatabase {
         
         }catch(Exception e)
         {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
         }
             
         return ques;
@@ -209,7 +209,7 @@ public class OperationsInDatabase {
         
         }catch(Exception e)
         {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
         }
             
         return ans;
@@ -233,7 +233,7 @@ public class OperationsInDatabase {
             b = true;
         }catch(Exception e)
         {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
         }
         
         return b;
